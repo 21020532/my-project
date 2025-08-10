@@ -14,7 +14,7 @@ int main() {
     int player1Score = 0, player2Score = 0;
     int currentPlayer = 1; // 1 hoặc 2
     
-    // Khởi tạo túi chữ cái cho 2 người chơi
+
     player1.drawTiles(tileBag, 7);
     player2.drawTiles(tileBag, 7);
 
@@ -22,7 +22,7 @@ int main() {
     std::cout << "Player 1: Red, Player 2: Blue\n\n";
 
     while (true) {
-        // Hiển thị bảng và thông tin người chơi
+
         board.display();
         
         Player& currentPlayerObj = (currentPlayer == 1) ? player1 : player2;
@@ -41,12 +41,12 @@ int main() {
         if (word == "quit") break;
         if (word == "pass") {
             std::cout << "Player " << currentPlayer << " passed their turn.\n";
-            // Chuyển lượt
+          
             currentPlayer = (currentPlayer == 1) ? 2 : 1;
             continue;
         }
         
-        // Kiểm tra từ có trong từ điển không
+
         if (!dict.isValidWord(word)) {
             std::cout << "Invalid word in dictionary!\n";
             continue;
@@ -57,19 +57,19 @@ int main() {
         std::cout << "Enter direction (0: horizontal, 1: vertical): ";
         std::cin >> dir;
         bool horizontal = (dir == 0);
+
         
-        // Kiểm tra người chơi có đủ chữ cái không (tính cả chữ cái trên bảng)
         if (!currentPlayerObj.hasTilesForWordWithBoard(word, board.getGrid(), x, y, horizontal)) {
             std::cout << "You don't have enough tiles for this word!\n";
             continue;
         }
         
         if (board.placeWord(word, x, y, horizontal, dict)) {
-            // Tính điểm cho từ vừa đặt
+           
             int wordScore = board.calculateTotalScore(word, x, y, horizontal);
             currentScore += wordScore;
             
-            // Debug tạm thời để kiểm tra điểm
+           
             std::cout << "DEBUG: Word '" << word << "' score: " << wordScore << std::endl;
             
             std::cout << "\n=== SUCCESS! ===\n";
@@ -79,7 +79,6 @@ int main() {
             
 
             
-            // Hiển thị các từ vuông góc nếu có
             std::vector<std::string> perpWords = board.getPerpendicularWords(word, x, y, horizontal);
             if (!perpWords.empty()) {
                 std::cout << "Perpendicular words formed: ";
@@ -89,16 +88,15 @@ int main() {
                 std::cout << std::endl;
             }
             
-            // Sử dụng chữ cái từ túi của người chơi (chỉ những chữ cái không có trên bảng)
+          
             currentPlayerObj.useTilesForWordWithBoard(word, board.getGrid(), x, y, horizontal);
-            // Rút thêm chữ cái để đủ 7 chữ
+          
             currentPlayerObj.drawTiles(tileBag, 7 - currentPlayerObj.getTileCount());
             
-            // Hiển thị điểm số cập nhật
+          
             std::cout << "\n=== SCORE UPDATE ===\n";
             std::cout << "Player 1: " << player1Score << " | Player 2: " << player2Score << std::endl;
-            
-            // Chuyển lượt
+         
             currentPlayer = (currentPlayer == 1) ? 2 : 1;
             
         } else {
